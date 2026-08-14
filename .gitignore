@@ -1,0 +1,7 @@
+node_modules/
+chrome-profile/
+.Spotlight-V100
+.Trashes
+.DS_Store
+.env
+credentials.json

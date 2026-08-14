@@ -1,0 +1,28 @@
+{
+    "name": "vinyl_price_tracker",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index.js",
+        "add": "node src/scripts/add_record.js",
+        "update-price": "node src/scripts/update_price.js",
+        "delete-release": "node src/scripts/delete_record.js",
+        "init-db": "node src/db/init_db.js",
+        "sqlite": "sqlite3 -cmd \".headers on\" -cmd \".mode column\" database/vinyl.sqlite",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "axios": "^1.19.0",
+        "better-sqlite3": "^13.0.3",
+        "cheerio": "^1.2.0",
+        "dotenv": "^17.4.2",
+        "fast-xml-parser": "^5.10.1",
+        "inquirer": "^14.0.2",
+        "puppeteer": "^25.5.0"
+    }
+}
