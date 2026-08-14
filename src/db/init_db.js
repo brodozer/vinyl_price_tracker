@@ -13,6 +13,7 @@ db.exec(`
     id INTEGER PRIMARY KEY,
     store TEXT NOT NULL,
     product_id TEXT NOT NULL,
+    ean TEXT,
     artist TEXT NOT NULL,
     album TEXT NOT NULL,
     labels TEXT,

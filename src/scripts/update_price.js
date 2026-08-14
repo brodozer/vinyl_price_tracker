@@ -1,21 +1,19 @@
 import { openDatabase } from '../db/connection.js';
-import { updatePrice } from '../db/update.js';
-import { getRecord } from '../parsers/get_record.js';
+import { updatePricesInDB } from '../db/update.js';
+import { getRecords } from '../parsers/get_record.js';
 
-// add shop like an parametr
-const url = process.argv[2];
+// add shop like an parametr for updating all prices
 
-if (!url) {
-    console.error('Usage: npm run update-price -- <product-url>');
-    process.exit(1);
-}
+export async function updatePrices(urls) {
+    const records = await getRecords(urls);
+    const db = openDatabase();
 
-const record = await getRecord(url);
-const db = openDatabase();
-
-try {
-    const result = updatePrice(db, record);
-    console.log(result.priceChanged ? `The record #${result.recordId} - price has been updated` : `The record #${result.recordId} - price has not been updated`);
-} finally {
-    db.close();
+    try {
+        const updatedRecords = updatePricesInDB(db, records);
+        updatedRecords.forEach((record) => {
+            console.log(record.priceChanged ? `The record #${record.recordId} - price has been updated` : `The record #${record.recordId} - price has not been updated`);
+        });
+    } finally {
+        db.close();
+    }
 }

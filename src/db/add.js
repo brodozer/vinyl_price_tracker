@@ -1,4 +1,4 @@
-export function addRecords(db, records) {
+export function addRecordsToDB(db, records) {
     return db.transaction(() => {
         const insertRecord = db.prepare(`
             INSERT INTO records (

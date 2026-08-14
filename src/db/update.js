@@ -1,57 +1,63 @@
-export function updateRecord(db, record) {
-    if (!record.productId) {
-        throw new Error('The product_id was not found');
-    }
-
-    if (!record.shop) {
-        throw new Error('The shop was not found');
-    }
-
+export function updatePricesInDB(db, records) {
     return db.transaction(() => {
-        const currentRecord = db
-            .prepare(
-                `
-                SELECT id, price
-                FROM records
-                WHERE store = ?
-                  AND product_id = ?
-            `,
-            )
-            .get(record.shop, record.productId);
+        const results = [];
 
-        if (!currentRecord) {
-            throw new Error(`Record not found: ${record.shop} / ${record.productId}`);
-        }
+        for (const record of records) {
+            if (!record.productId) {
+                throw new Error('The product_id was not found');
+            }
 
-        db.prepare(
-            `
-            UPDATE records
-            SET price = ?,
-                stock = ?,
-                last_checked = CURRENT_TIMESTAMP
-            WHERE id = ?
-        `,
-        ).run(record.price, record.stock, currentRecord.id);
+            if (!record.shop) {
+                throw new Error('The shop was not found');
+            }
 
-        const priceChanged = currentRecord.price !== record.price;
+            const currentRecord = db
+                .prepare(
+                    `
+                    SELECT id, price
+                    FROM records
+                    WHERE store = ?
+                      AND product_id = ?
+                `,
+                )
+                .get(record.shop, record.productId);
 
-        if (priceChanged) {
+            if (!currentRecord) {
+                throw new Error(`Record not found: ${record.shop} / ${record.productId}`);
+            }
+
+            const priceChanged = currentRecord.price !== record.price;
+
             db.prepare(
                 `
-                INSERT INTO price_history (
-                    record_id,
-                    price,
-                    currency
-                )
-                VALUES (?, ?)
+                UPDATE records
+                SET price = ?,
+                    stock = ?,
+                    last_checked = CURRENT_TIMESTAMP
+                WHERE id = ?
             `,
-            ).run(currentRecord.id, record.price, record.currency);
+            ).run(record.price, record.stock, currentRecord.id);
+
+            if (priceChanged) {
+                db.prepare(
+                    `
+                    INSERT INTO price_history (
+                        record_id,
+                        price,
+                        currency
+                    )
+                    VALUES (?, ?, ?)
+                `,
+                ).run(currentRecord.id, record.price, record.currency);
+            }
+
+            results.push({
+                recordId: currentRecord.id,
+                priceChanged,
+            });
         }
 
-        return {
-            recordId: currentRecord.id,
-            priceChanged,
-        };
+        return results;
     })();
 }
 

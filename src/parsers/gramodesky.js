@@ -35,6 +35,8 @@ export async function scrapeGramodesky(url) {
                 }),
             );
 
+            console.log('details ', details);
+
             const productId = details['ID produktu'];
 
             const isStock = () => {
@@ -68,6 +70,7 @@ export async function scrapeGramodesky(url) {
                 artist: details.Interpret,
                 album: details.Titul,
                 labels: details.Vydavatelství,
+                ean: details.EAN,
                 releaseDate,
                 price: 597,
                 currency: 'CZK',

@@ -6,7 +6,7 @@ const stores = {
     'muziker.cz': { name: 'Muziker', scraper: scrapeMuziker },
 };
 
-export async function getRecord(url) {
+async function parseRecord(url) {
     const hostname = new URL(url).hostname.toLowerCase();
     const store = stores[hostname.replace(/^www\./, '')];
 
@@ -18,4 +18,13 @@ export async function getRecord(url) {
         ...(await store.scraper(url)),
         store: store.name,
     };
+}
+
+export async function getRecords(urls) {
+    const records = [];
+    for (let url of urls) {
+        const record = await parseRecord(url);
+        records.push(record);
+    }
+    return records;
 }

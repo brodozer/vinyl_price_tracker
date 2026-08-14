@@ -17,13 +17,15 @@ export async function scrapeMuziker(url) {
         .map((value) => value.trim());
 
     return {
-        productId: $('meta[property="lb:id"]').attr('content') || null,
+        productId: $('meta[property="lb:id"]').attr('content'),
+        ean: null,
         artist,
         album: albumParts.join(' - '),
-        labels: $('a[href*="lp-desky?param.739"]')
-            .map((_, el) => $(el).text().trim())
-            .get()
-            .join(', '),
+        labels:
+            $('a[href*="lp-desky?param.739"]')
+                .map((_, el) => $(el).text().trim())
+                .get()
+                .join(', ') || null,
         releaseDate: details[0]?.replaceAll('.', '-') || null,
         url,
         price: Number($('[data-original-price-value]').attr('data-original-price-value')),

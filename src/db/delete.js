@@ -1,22 +1,21 @@
-export function deleteRelease(db, releaseId) {
-    const id = Number(releaseId);
-
-    if (!Number.isInteger(id) || id <= 0) {
-        throw new Error('releaseId должен быть положительным числом');
+export function deleteRecordFromDB(db, recordId) {
+    // record id is always number
+    if (recordId <= 0) {
+        throw new Error('recordId must be positive number');
     }
 
     const result = db
         .prepare(
             `
-        DELETE FROM releases
+        DELETE FROM records
         WHERE id = ?
     `,
         )
-        .run(id);
+        .run(recordId);
 
     if (result.changes === 0) {
-        throw new Error(`Релиз с id ${id} не найден`);
+        throw new Error(`Record with id ${recordId} hasn't found`);
     }
 
-    return { releaseId: id };
+    return recordId;
 }
