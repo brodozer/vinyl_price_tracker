@@ -1,4 +1,17 @@
-export function updatePricesInDB(db, records) {
+export function getUrlsByStore(db, store) {
+    return db
+        .prepare(
+            `
+            SELECT url
+            FROM records
+            WHERE store = ?
+        `,
+        )
+        .all(store)
+        .map((record) => record.url);
+}
+
+export function updateRecordsInDB(db, records) {
     return db.transaction(() => {
         const results = [];
 
@@ -27,16 +40,19 @@ export function updatePricesInDB(db, records) {
             }
 
             const priceChanged = currentRecord.price !== record.price;
+            const stockStatus = currentRecord.stock !== record.stock;
 
-            db.prepare(
-                `
+            if (priceChanged || stockStatus) {
+                db.prepare(
+                    `
                 UPDATE records
                 SET price = ?,
                     stock = ?,
                     last_checked = CURRENT_TIMESTAMP
                 WHERE id = ?
-            `,
-            ).run(record.price, record.stock, currentRecord.id);
+                `,
+                ).run(record.price, record.stock, currentRecord.id);
+            }
 
             if (priceChanged) {
                 db.prepare(
@@ -54,6 +70,7 @@ export function updatePricesInDB(db, records) {
             results.push({
                 recordId: currentRecord.id,
                 priceChanged,
+                stockStatus,
             });
         }
 

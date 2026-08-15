@@ -10,6 +10,7 @@
         "update-price": "node src/scripts/update_price.js",
         "delete-release": "node src/scripts/delete_record.js",
         "init-db": "node src/db/init_db.js",
+        "execute-sql": "node src/scripts/execute_sql.js",
         "sqlite": "sqlite3 -cmd \".headers on\" -cmd \".mode column\" database/vinyl.sqlite",
         "test": "echo \"Error: no test specified\" && exit 1"
     },

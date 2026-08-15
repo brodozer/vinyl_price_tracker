@@ -1,0 +1,1 @@
+SELECT artist, album, price, currency FROM records;
