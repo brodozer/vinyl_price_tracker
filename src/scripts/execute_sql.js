@@ -5,7 +5,7 @@ import path from 'node:path';
 import { ROOT } from '../../config/paths.js';
 
 export async function executeSQL(db, file) {
-    const sql = fs.readFileSync(path.join(ROOT, 'sql', file), 'utf8').trim();
+    const sql = fs.readFileSync(path.join(ROOT, 'sql', `${file}.sql`), 'utf8').trim();
 
     const statement = db.prepare(sql);
 

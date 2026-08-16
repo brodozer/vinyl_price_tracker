@@ -20,23 +20,23 @@ export function updateRecordsInDB(db, records) {
                 throw new Error('The product_id was not found');
             }
 
-            if (!record.shop) {
-                throw new Error('The shop was not found');
+            if (!record.store) {
+                throw new Error('The store was not found');
             }
 
             const currentRecord = db
                 .prepare(
                     `
-                    SELECT id, price
+                    SELECT id, price, stock
                     FROM records
                     WHERE store = ?
                       AND product_id = ?
                 `,
                 )
-                .get(record.shop, record.productId);
+                .get(record.store, record.productId);
 
             if (!currentRecord) {
-                throw new Error(`Record not found: ${record.shop} / ${record.productId}`);
+                throw new Error(`Record not found: ${record.store} / ${record.productId}`);
             }
 
             const priceChanged = currentRecord.price !== record.price;
@@ -80,7 +80,7 @@ export function updateRecordsInDB(db, records) {
 
 // example what I need to get to update the record price
 // {
-//     shop: 'muziker',
+//     store: 'muziker',
 //     productId: '338494',
 //     price: 549,
 //     stock: 'in_stock' 0 or 1

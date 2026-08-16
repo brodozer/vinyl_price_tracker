@@ -43,9 +43,13 @@ export async function queryDatabase() {
     }
 }
 
+function tableName(name) {
+    console.log(`=============${name}=============`);
+}
+
 async function showTable(db) {
     const records = getAllRecords(db);
-
+    tableName('RECORDS');
     console.table(records);
 }
 
@@ -53,7 +57,7 @@ async function showByStore(db) {
     const { store } = await inquirer.prompt(menu.database.byStore);
 
     const records = getRecordsByStore(db, store);
-
+    tableName('RECORDS BY STORE');
     console.table(records);
 }
 
@@ -61,12 +65,22 @@ async function showById(db) {
     const { id } = await inquirer.prompt(menu.database.byID);
 
     const record = getRecordById(db, id);
-
+    tableName('RECORDS BY ID');
     console.table(record);
 }
 
 async function showPriceHistory(db) {
     const { id } = await inquirer.prompt(menu.database.priceHistory);
     const records = getPriceHistory(db, id);
-    console.table(records);
+    tableName('PRICE HISTORY');
+    console.log(`${records[0].artist} - ${records[0].album}`);
+
+    console.table(
+        records.map(({ price, currency, checked_at }) => ({
+            price,
+            currency,
+            date: checked_at,
+        })),
+    );
+    //console.table(records);
 }

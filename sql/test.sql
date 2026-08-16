@@ -1,1 +1,15 @@
-SELECT artist, album, price, currency FROM records;
+SELECT artist, album, price, currency, release_date FROM records;
+
+-- price history by record ID
+-- SELECT
+--     r.artist,
+--     r.album,
+--     ph.price,
+--     ph.currency,
+--     ph.checked_at
+-- FROM records AS r
+-- JOIN price_history AS ph
+--     ON ph.record_id = r.id
+-- WHERE r.id = 1
+-- ORDER BY ph.checked_at DESC;
+

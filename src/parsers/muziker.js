@@ -5,9 +5,11 @@ export async function scrapeMuziker(url) {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
-    const details = $('.extended-product-short-description ul li strong')
-        .map((_, el) => $(el).text().trim())
-        .get();
+    const releaseDate = $('div.technical-params-gorup__item p')
+        .filter((_, el) => $(el).text().trim().toLowerCase().includes('datum vydání'))
+        .next()
+        .text()
+        .trim();
 
     const productTitle = $('h1.product-title').text();
 
@@ -26,7 +28,7 @@ export async function scrapeMuziker(url) {
                 .map((_, el) => $(el).text().trim())
                 .get()
                 .join(', ') || null,
-        releaseDate: details[0]?.replaceAll('.', '-') || null,
+        releaseDate: releaseDate?.split('.').reverse().join('-') || null,
         url,
         price: Number($('[data-original-price-value]').attr('data-original-price-value')),
         currency: 'CZK',
