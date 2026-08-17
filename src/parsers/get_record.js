@@ -11,7 +11,7 @@ async function parseRecord(url) {
     const store = stores[hostname.replace(/^www\./, '')];
 
     if (!store) {
-        throw new Error(`Для магазина ${hostname} ещё нет парсера`);
+        throw new Error(`The store ${hostname} doesn't have a parser`);
     }
 
     return {

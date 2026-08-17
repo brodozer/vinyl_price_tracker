@@ -1,7 +1,7 @@
 import { openDatabase } from '../db/connection.js';
 import { updateRecordsInDB, getUrlsByStore } from '../db/update.js';
 import { getRecords } from '../parsers/get_record.js';
-import { records } from './records.js'; // import records from DB
+//import { records } from './records.js'; // import records from DB
 
 // add shop like an parametr for updating all prices by the store
 
@@ -37,7 +37,7 @@ export async function updateRecords(store) {
             return;
         }
 
-        //const records = await getRecords(urls);
+        const records = await getRecords(urls);
 
         //console.log('recordsByStore ', records);
 

@@ -13,16 +13,17 @@ export async function scrapeGramodesky(url) {
         const page = pages.find((page) => page.url() === url);
 
         if (!page) {
-            throw new Error('Сначала открой ссылку товара вручную в Chrome');
+            throw new Error('Before you can continue, you need to open the Chrome debug');
         }
 
         const title = await page.title();
 
         if (/cloudflare|captcha|just a moment/i.test(title)) {
-            throw new Error('Страница показывает проверку. Пройди её вручную в Chrome');
+            throw new Error('The page shows check, you need to go checking');
         }
 
         const product = await page.evaluate((productUrl) => {
+            console.log('scrape Gramodesky');
             const normalizeText = (element) => element.textContent.replace(/\s+/g, ' ').trim();
 
             const table = document.querySelector('#tab-detail table[wire\\:key]');
@@ -40,9 +41,16 @@ export async function scrapeGramodesky(url) {
             const productId = details['ID produktu'];
 
             const isStock = () => {
-                const stockBtn = document.querySelector(`[id*="${productId}"]`);
-                return stockBtn.dataset.availableId === 1;
+                // document.querySelector('.btn[id*="${productId}"]')
+                const stockBtn = document.querySelector(`.availability-date-container[data-release-id="${productId}"]`);
+                console.log('stockBtn ', stockBtn);
+                console.log('available ', stockBtn.dataset.availableId);
+                return stockBtn.dataset.availableId === '1';
             };
+
+            const stockStatus = isStock();
+
+            console.log('stock ', stockStatus);
 
             const date = details['Datum vydání'];
 
@@ -69,12 +77,12 @@ export async function scrapeGramodesky(url) {
             return {
                 artist: details.Interpret,
                 album: details.Titul,
-                labels: details.Vydavatelství,
-                ean: details.EAN,
-                releaseDate,
+                labels: details.Vydavatelství || null,
+                ean: details.EAN || null,
+                releaseDate: releaseDate || null,
                 price: 597,
                 currency: 'CZK',
-                inStock: isStock(),
+                stock: isStock() ? 'in_stock' : 'out_of_stock',
                 productId,
                 url: productUrl,
             };
