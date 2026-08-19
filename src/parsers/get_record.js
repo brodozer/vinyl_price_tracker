@@ -7,8 +7,11 @@ const stores = {
 };
 
 async function parseRecord(url) {
-    const hostname = new URL(url).hostname.toLowerCase();
+    const parsedUrl = new URL(url);
+    const hostname = parsedUrl.hostname.toLowerCase();
     const store = stores[hostname.replace(/^www\./, '')];
+    // parsedUrl.search = '';
+    // const cleanURL = parsedUrl.toString();
 
     if (!store) {
         throw new Error(`The store ${hostname} doesn't have a parser`);

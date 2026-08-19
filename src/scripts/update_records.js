@@ -1,7 +1,10 @@
 import { openDatabase } from '../db/connection.js';
 import { updateRecordsInDB, getUrlsByStore } from '../db/update.js';
 import { getRecords } from '../parsers/get_record.js';
-//import { records } from './records.js'; // import records from DB
+import { getGramodeskyRecords } from '../parsers/favorites.js';
+import { readFile } from './read_file.js';
+
+import { records } from './records.js'; // import records from DB
 
 // add shop like an parametr for updating all prices by the store
 
@@ -18,9 +21,21 @@ function getUpdateMessage(record) {
     }
 
     if (message) {
-        console.log(message);
+        return message;
     }
 }
+
+const updateSources = {
+    Gramodesky: {
+        getUrls: () => readFile('urls', 'favorites.txt'),
+        getRecords: getGramodeskyRecords,
+    },
+
+    Muziker: {
+        getUrls: (db) => getUrlsByStore(db, 'Muziker'),
+        getRecords: getRecords,
+    },
+};
 
 export async function updateRecords(store) {
     if (!store) {
@@ -30,20 +45,15 @@ export async function updateRecords(store) {
     const db = openDatabase();
 
     try {
-        const urls = getUrlsByStore(db, store);
+        const source = updateSources[store];
+        const urls = source.getUrls(db);
+        //const records = await source.getRecords(urls);
 
-        if (urls.length === 0) {
-            console.log(`No records found for store: ${store}`);
-            return;
-        }
-
-        const records = await getRecords(urls);
-
-        //console.log('recordsByStore ', records);
+        console.log('recordsByStore ', records);
 
         const updatedRecords = updateRecordsInDB(db, records);
         updatedRecords.forEach((record) => {
-            getUpdateMessage(record);
+            console.log(getUpdateMessage(record));
         });
     } finally {
         db.close();

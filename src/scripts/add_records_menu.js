@@ -1,9 +1,7 @@
 import inquirer from 'inquirer';
-import fs from 'node:fs';
-import path from 'node:path';
 
 import menu from './menu_config.js';
-import { ROOT } from '../../config/paths.js';
+import { readFile } from './read_file.js';
 import { addRecords } from './add_record.js';
 
 export async function addRecordsMenu() {
@@ -19,12 +17,8 @@ export async function addRecordsMenu() {
 
     if (source === 'Import File') {
         const { fileName } = await inquirer.prompt(menu.addFile);
-        const pathToFile = path.join(ROOT, 'urls', fileName);
-        urls = fs
-            .readFileSync(pathToFile, 'utf8')
-            .split(/\r?\n/)
-            .map((url) => url.trim())
-            .filter(Boolean);
+        urls = await readFile('urls', fileName);
+        console.log('urls ', urls);
     }
 
     await addRecords(urls);

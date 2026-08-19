@@ -6,14 +6,18 @@ const browserDebug = {
 
 export async function scrapeGramodesky(url) {
     const browser = await puppeteer.connect(browserDebug);
+    console.log('url ', url);
 
     try {
         const pages = await browser.pages();
+        console.log('pages ', pages);
+
+        console.log(pages.map((page) => page.url()));
 
         const page = pages.find((page) => page.url() === url);
 
         if (!page) {
-            throw new Error('Before you can continue, you need to open the Chrome debug');
+            throw new Error(`Page is not open in Chrome: ${url}`);
         }
 
         const title = await page.title();
@@ -40,17 +44,19 @@ export async function scrapeGramodesky(url) {
 
             const productId = details['ID produktu'];
 
-            const isStock = () => {
+            const stockStatus = (id) => {
                 // document.querySelector('.btn[id*="${productId}"]')
-                const stockBtn = document.querySelector(`.availability-date-container[data-release-id="${productId}"]`);
-                console.log('stockBtn ', stockBtn);
-                console.log('available ', stockBtn.dataset.availableId);
-                return stockBtn.dataset.availableId === '1';
+                const stock = document.querySelector(`.availability-date-container[data-release-id="${id}"]`);
+                const stockStatus = stock.dataset.availableId === '1';
+                return stockStatus ? 'in_stock' : 'out_of_stock';
             };
 
-            const stockStatus = isStock();
-
-            console.log('stock ', stockStatus);
+            const getPrice = (id) => {
+                const release = document.querySelector(`[wire\\:key="variant-${id}"]`);
+                // release.dataset.dl contains artist name and album, price, currency
+                const price = JSON.parse(release.dataset.dl).ecommerce.value; //or  .ecomm_totalvalue
+                return price;
+            };
 
             const date = details['Datum vydání'];
 
@@ -80,9 +86,9 @@ export async function scrapeGramodesky(url) {
                 labels: details.Vydavatelství || null,
                 ean: details.EAN || null,
                 releaseDate: releaseDate || null,
-                price: 597,
+                price: getPrice(productId),
                 currency: 'CZK',
-                stock: isStock() ? 'in_stock' : 'out_of_stock',
+                stock: stockStatus(productId),
                 productId,
                 url: productUrl,
             };
