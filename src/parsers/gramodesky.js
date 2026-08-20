@@ -10,10 +10,6 @@ export async function scrapeGramodesky(url) {
 
     try {
         const pages = await browser.pages();
-        console.log('pages ', pages);
-
-        console.log(pages.map((page) => page.url()));
-
         const page = pages.find((page) => page.url() === url);
 
         if (!page) {
@@ -45,7 +41,6 @@ export async function scrapeGramodesky(url) {
             const productId = details['ID produktu'];
 
             const stockStatus = (id) => {
-                // document.querySelector('.btn[id*="${productId}"]')
                 const stock = document.querySelector(`.availability-date-container[data-release-id="${id}"]`);
                 const stockStatus = stock.dataset.availableId === '1';
                 return stockStatus ? 'in_stock' : 'out_of_stock';
@@ -53,9 +48,14 @@ export async function scrapeGramodesky(url) {
 
             const getPrice = (id) => {
                 const release = document.querySelector(`[wire\\:key="variant-${id}"]`);
+                if (!release) {
+                    console.warn(`Price not found for release ${id}, setting price to 0`);
+                    return 0;
+                }
+                return JSON.parse(release.dataset.dl).ecommerce.value;
+
                 // release.dataset.dl contains artist name and album, price, currency
-                const price = JSON.parse(release.dataset.dl).ecommerce.value; //or  .ecomm_totalvalue
-                return price;
+                //or  .ecomm_totalvalue
             };
 
             const date = details['Datum vydání'];

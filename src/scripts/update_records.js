@@ -1,7 +1,7 @@
 import { openDatabase } from '../db/connection.js';
 import { updateRecordsInDB, getUrlsByStore } from '../db/update.js';
 import { getRecords } from '../parsers/get_record.js';
-import { getGramodeskyRecords } from '../parsers/favorites.js';
+import { getGramodeskyRecords } from '../parsers/get_records_from_favorites.js';
 import { readFile } from './read_file.js';
 
 import { records } from './records.js'; // import records from DB
