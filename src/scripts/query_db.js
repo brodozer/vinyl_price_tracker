@@ -73,14 +73,19 @@ async function showPriceHistory(db) {
     const { id } = await inquirer.prompt(menu.database.priceHistory);
     const records = getPriceHistory(db, id);
     tableName('PRICE HISTORY');
-    console.log(`${records[0].artist} - ${records[0].album}`);
+    if (records) {
+        console.log(`${records[0].artist} - ${records[0].album}`);
 
-    console.table(
-        records.map(({ price, currency, checked_at }) => ({
-            price,
-            currency,
-            date: checked_at,
-        })),
-    );
+        console.table(
+            records.map(({ price, currency, checked_at }) => ({
+                price,
+                currency,
+                date: checked_at,
+            })),
+        );
+    } else {
+        console.log(`The id #${id} doesn't exist`);
+    }
+
     //console.table(records);
 }

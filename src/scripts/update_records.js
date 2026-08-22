@@ -4,7 +4,7 @@ import { getRecords } from '../parsers/get_record.js';
 import { getGramodeskyRecords } from '../parsers/get_records_from_favorites.js';
 import { readFile } from './read_file.js';
 
-import { records } from './records.js'; // import records from DB
+//import { records } from './records.js'; // import records from DB
 
 // add shop like an parametr for updating all prices by the store
 
@@ -46,8 +46,9 @@ export async function updateRecords(store) {
 
     try {
         const source = updateSources[store];
-        const urls = source.getUrls(db);
-        //const records = await source.getRecords(urls);
+        const urls = await source.getUrls(db);
+        console.log('urls ', urls);
+        const records = await source.getRecords(urls);
 
         console.log('recordsByStore ', records);
 

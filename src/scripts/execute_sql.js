@@ -7,11 +7,19 @@ import { ROOT } from '../../config/paths.js';
 export async function executeSQL(db, file) {
     const sql = fs.readFileSync(path.join(ROOT, 'sql', `${file}`), 'utf8').trim();
 
-    const statement = db.prepare(sql);
+    //const statement = db.prepare(sql);
 
-    if (statement.reader) {
-        console.table(statement.all());
-    } else {
-        console.log(statement.run());
+    // if (statement.reader) {
+    //     console.table(statement.all());
+    // } else {
+    //     console.log(statement.run());
+    // }
+
+    if (!sql) {
+        console.log('SQL file is empty');
+        return;
     }
+
+    db.exec(sql);
+    console.log(`SQL file "${file}" executed successfully`);
 }

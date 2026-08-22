@@ -11,14 +11,16 @@ export async function parseGramodeskyFavoritesPage(page) {
             const stock = wishListItem.querySelector('.wishlist-col-availability span').textContent === 'Skladem';
 
             const price = wishListItem.querySelectorAll('.wishlist-col-price p')[1].textContent.replace(/\s*Kč\s*$/, '');
+            //console.log('item ', wishListItem);
 
-            const productId = wishListItem.querySelectorAll('a')[5].getAttribute('href').split('=')[1];
+            const productId = wishListItem.querySelector('a').getAttribute('href').split('=')[1];
 
             records.push({
                 price: Number(price),
                 stock: stock ? 'in_stock' : 'out_of_stock',
                 productId,
                 store: 'Gramodesky',
+                currency: 'CZK',
             });
         }
 
