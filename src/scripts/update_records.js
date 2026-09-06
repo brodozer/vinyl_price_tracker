@@ -8,21 +8,15 @@ import { readFile } from './read_file.js';
 
 // add shop like an parametr for updating all prices by the store
 
-function getUpdateMessage(record) {
-    let message = '';
-    if (record.priceChanged && record.stockStatus) {
-        message = `The record #${record.recordId} - price and stock status has been updated`;
-    } else if (record.priceChanged) {
-        message = `The record #${record.recordId} - price has been updated`;
-    } else if (record.stockStatus) {
-        message = `The record #${record.recordId} - stock status has been updated`;
-    } else {
-        message = `The record #${record.recordId} - has the same price and stock status`;
-    }
+const messages = {
+    priceAndStock: 'price and stock status have been updated',
+    price: 'price has been updated',
+    stock: 'stock status has been updated',
+    unchanged: 'has the same price and stock status',
+};
 
-    if (message) {
-        return message;
-    }
+function getUpdateMessage(record) {
+    return `The record #${record.recordId} - ${messages[record.updateStatus]}`;
 }
 
 const updateSources = {

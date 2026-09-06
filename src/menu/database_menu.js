@@ -1,13 +1,18 @@
 // launch prepared functions from db/queries.js to show data from the tables records and price_history
 
 // example
-import inquirer from 'inquirer';
-import menu from './menu_config.js';
-import { openDatabase } from '../db/connection.js';
-import { executeSQL } from './execute_sql.js';
-import { getAllRecords, getRecordsByStore, getRecordById, getPriceHistory } from '../db/queries.js';
+import fs from 'node:fs';
+import path from 'node:path';
+import { ROOT } from '../../config/paths.js';
 
-export async function queryDatabase() {
+import inquirer from 'inquirer';
+import menu from './config_menu.js';
+import { openDatabase } from '../db/connection.js';
+
+import { getAllRecords, getRecordsByStore, getRecordById, getPriceHistory, executeSQL } from '../db/queries.js';
+
+// databaseMenu -> move to menu.js
+export async function databaseMenu() {
     const db = openDatabase();
     let exit = false;
     try {
@@ -16,7 +21,7 @@ export async function queryDatabase() {
 
             switch (toDo) {
                 case 'records':
-                    showTable(db);
+                    showRecords(db);
                     break;
 
                 case 'byStore':
@@ -30,8 +35,7 @@ export async function queryDatabase() {
                     await showPriceHistory(db);
                     break;
                 case 'SQL':
-                    const { file } = await inquirer.prompt(menu.database.sql);
-                    await executeSQL(db, file);
+                    await executeSQLFile(db);
                     break;
                 case 'back':
                     exit = true;
@@ -47,7 +51,7 @@ function tableName(name) {
     console.log(`=============${name}=============`);
 }
 
-async function showTable(db) {
+async function showRecords(db) {
     const records = getAllRecords(db);
     tableName('RECORDS');
     console.table(records);
@@ -72,8 +76,8 @@ async function showById(db) {
 async function showPriceHistory(db) {
     const { id } = await inquirer.prompt(menu.database.priceHistory);
     const records = getPriceHistory(db, id);
-    tableName('PRICE HISTORY');
-    if (records) {
+    if (records.length > 0) {
+        tableName('PRICE HISTORY');
         console.log(`${records[0].artist} - ${records[0].album}`);
 
         console.table(
@@ -88,4 +92,18 @@ async function showPriceHistory(db) {
     }
 
     //console.table(records);
+}
+
+export async function executeSQLFile(db) {
+    const { file } = await inquirer.prompt(menu.database.sql);
+    const sql = fs.readFileSync(path.join(ROOT, 'sql', `${file}`), 'utf8').trim();
+
+    if (!sql) {
+        console.log('SQL file is empty');
+        return;
+    }
+
+    executeSQL(db, sql);
+
+    console.log(`SQL file "${file}" executed successfully`);
 }

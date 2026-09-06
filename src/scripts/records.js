@@ -1,3 +1,4 @@
+//array of records for testing app
 export const records = [
     {
         productId: '1187758',

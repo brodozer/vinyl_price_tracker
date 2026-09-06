@@ -1,4 +1,4 @@
--- SELECT artist, album, price, currency, release_date FROM records;
+SELECT artist, album, price, currency, release_date FROM records;
 
 -- price history by record ID
 -- SELECT
@@ -18,12 +18,12 @@
 -- WHERE id = 14;
 
 UPDATE records 
-SET price = 469, stock = 'out_of_stock'
+SET price = 300, stock = 'out_of_stock'
 WHERE id = 18;
 
 UPDATE records
 SET price = 500
-WHERE id = 17;
+WHERE id = 23;
 
 UPDATE records
 SET stock = 'in_stock'

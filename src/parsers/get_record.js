@@ -24,8 +24,8 @@ async function parseRecord(url) {
 }
 
 export async function getRecords(urls) {
-    if (!urls) {
-        throw new Error("urls doesn't contsins links");
+    if (!urls || urls.length === 0) {
+        throw new Error("urls doesn't contains links");
     }
     const records = [];
     for (let url of urls) {

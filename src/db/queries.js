@@ -17,13 +17,15 @@ export function getRecordsByStore(db, store) {
             SELECT id, artist, album, price, currency, stock
             FROM records
             WHERE store = ?
+            ORDER BY id
         `,
         )
         .all(store);
 }
 
 export function getPriceHistory(db, recordId) {
-    const history = db
+    // price history is array of prices or empty []
+    return db
         .prepare(
             `
         SELECT
@@ -40,15 +42,19 @@ export function getPriceHistory(db, recordId) {
     `,
         )
         .all(recordId);
-
-    if (!history.length) {
-        console.log(`Record #${recordId} not found`);
-        return;
-    }
-
-    return history;
 }
 
 export function getAllRecords(db) {
     return db.prepare(`SELECT id, artist, album, price, currency, stock, store FROM records`).all();
+}
+
+export function executeSQL(db, sql) {
+    //const statement = db.prepare(sql);
+
+    // if (statement.reader) {
+    //     console.table(statement.all());
+    // } else {
+    //     console.log(statement.run());
+    // }
+    db.exec(sql);
 }

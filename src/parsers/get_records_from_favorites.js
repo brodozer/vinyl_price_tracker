@@ -13,7 +13,13 @@ export async function getGramodeskyRecords(urls) {
         const records = [];
 
         for (const url of urls) {
+            console.log('Requested URL:', url);
             const page = pages.find((page) => page.url() === url);
+
+            console.log(
+                'Open pages:',
+                pages.map((page) => page.url()),
+            );
 
             if (!page) {
                 throw new Error(`Page is not open: ${url}`);

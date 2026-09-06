@@ -1,7 +1,7 @@
 export function deleteRecordFromDB(db, recordId) {
     // record id is always number
     if (recordId <= 0) {
-        throw new Error('recordId must be positive number');
+        throw new Error(`Record id #${recordId} must be a positive number`);
     }
 
     const result = db
@@ -14,7 +14,7 @@ export function deleteRecordFromDB(db, recordId) {
         .run(recordId);
 
     if (result.changes === 0) {
-        throw new Error(`Record with id ${recordId} hasn't found`);
+        throw new Error(`No record found for id: #${recordId}`);
     }
 
     return recordId;

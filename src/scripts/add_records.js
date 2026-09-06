@@ -11,24 +11,27 @@ function notifications(newRecords) {
     const rejected = newRecords.filter(({ success }) => !success).map(({ url }) => url);
 
     if (saved.length > 0) {
-        console.log(`The records # ${saved.join(', ')} were saved`);
+        console.log(`The record # ${saved.join(', ')} was added successfully`);
     }
 
     if (rejected.length > 0) {
-        console.log(`The records ${rejected.join(', ')} weren't saved`);
+        console.log(`The record ${rejected.join(', ')} wasn't added`);
     }
 }
 
+// check catch the errors from getRecords()
 export async function addRecords(urls) {
-    const records = await getRecords(urls);
-
-    console.log('records ', records);
-
     const db = openDatabase();
 
     try {
+        const records = await getRecords(urls);
+
+        console.log('records ', records);
+
         const newRecords = addRecordsToDB(db, records);
         notifications(newRecords);
+    } catch (error) {
+        console.log(error.message);
     } finally {
         db.close();
     }

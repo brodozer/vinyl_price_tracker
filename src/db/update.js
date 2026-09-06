@@ -1,3 +1,19 @@
+function getUpdateStatus(priceChanged, stockChanged) {
+    if (priceChanged && stockChanged) {
+        return 'priceAndStock';
+    }
+
+    if (priceChanged) {
+        return 'price';
+    }
+
+    if (stockChanged) {
+        return 'stock';
+    }
+
+    return 'unchanged';
+}
+
 export function getUrlsByStore(db, store) {
     return db
         .prepare(
@@ -40,9 +56,11 @@ export function updateRecordsInDB(db, records) {
             }
 
             const priceChanged = currentRecord.price !== record.price;
-            const stockStatus = currentRecord.stock !== record.stock;
+            const stockChanged = currentRecord.stock !== record.stock;
 
-            if (priceChanged || stockStatus) {
+            const updateStatus = getUpdateStatus(priceChanged, stockChanged);
+
+            if (priceChanged || stockChanged) {
                 db.prepare(
                     `
                 UPDATE records
@@ -69,8 +87,7 @@ export function updateRecordsInDB(db, records) {
 
             results.push({
                 recordId: currentRecord.id,
-                priceChanged,
-                stockStatus,
+                updateStatus,
             });
         }
 

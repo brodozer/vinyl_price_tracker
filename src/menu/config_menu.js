@@ -4,7 +4,7 @@ export default {
             type: 'select',
             name: 'action',
             message: 'Select action',
-            choices: ['1. Add', '2. Update', '3. Delete', '4. Query database', 'Exit'],
+            choices: ['1. Add', '2. Update', '3. Delete', '4. Database', 'Exit'],
         },
     ],
 
@@ -116,9 +116,9 @@ export default {
 
     delete: [
         {
-            type: 'number',
-            name: 'id',
-            message: 'Enter id...',
+            type: 'input',
+            name: 'ids',
+            message: 'Enter id(s), separated by comma...',
         },
     ],
 };
@@ -127,7 +127,7 @@ export const ACTIONS = {
     ADD: '1. Add',
     UPDATE: '2. Update',
     DELETE: '3. Delete',
-    QUERY: '4. Query database',
+    DATABASE: '4. Database',
     EXIT: 'Exit',
 };
 
