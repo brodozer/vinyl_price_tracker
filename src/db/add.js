@@ -4,6 +4,8 @@ export function addRecordsToDB(db, records) {
             INSERT OR IGNORE INTO records (
                 store,
                 product_id,
+                ean,
+                discogs_id,
                 artist,
                 album,
                 labels,
@@ -13,7 +15,7 @@ export function addRecordsToDB(db, records) {
                 currency,
                 stock
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         `);
 
         const insertHistory = db.prepare(`
@@ -28,7 +30,7 @@ export function addRecordsToDB(db, records) {
         const result = [];
 
         for (const record of records) {
-            const newRecord = insertRecord.run(record.store, record.productId, record.artist, record.album, record.labels ?? null, record.releaseDate ?? null, record.url, record.price, record.currency, record.stock);
+            const newRecord = insertRecord.run(record.store, record.productId, record.ean, record.discogsId, record.artist, record.album, record.labels, record.releaseDate, record.url, record.price, record.currency, record.stock);
             // check result
             if (newRecord.changes === 0) {
                 result.push({ success: false, id: null, url: record.url });

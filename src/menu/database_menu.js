@@ -1,13 +1,12 @@
 // launch prepared functions from db/queries.js to show data from the tables records and price_history
 
-// example
-import fs from 'node:fs';
-import path from 'node:path';
-import { ROOT } from '../../config/paths.js';
+import { readFile } from '../scripts/utils.js';
 
 import inquirer from 'inquirer';
 import menu from './config_menu.js';
 import { openDatabase } from '../db/connection.js';
+
+import { createDB } from '../db/init_db.js';
 
 import { getAllRecords, getRecordsByStore, getRecordById, getPriceHistory, executeSQL } from '../db/queries.js';
 
@@ -37,6 +36,9 @@ export async function databaseMenu() {
                 case 'SQL':
                     await executeSQLFile(db);
                     break;
+                case 'DB':
+                    createDB(db);
+                    break;
                 case 'back':
                     exit = true;
                     break;
@@ -48,7 +50,7 @@ export async function databaseMenu() {
 }
 
 function tableName(name) {
-    console.log(`=============${name}=============`);
+    console.log(`============= ${name} =============`);
 }
 
 async function showRecords(db) {
@@ -96,7 +98,8 @@ async function showPriceHistory(db) {
 
 export async function executeSQLFile(db) {
     const { file } = await inquirer.prompt(menu.database.sql);
-    const sql = fs.readFileSync(path.join(ROOT, 'sql', `${file}`), 'utf8').trim();
+    const contentFile = readFile('sql', file);
+    const sql = contentFile.trim();
 
     if (!sql) {
         console.log('SQL file is empty');

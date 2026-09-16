@@ -8,4 +8,9 @@ export const PATHS = {
         init: path.join(ROOT, 'sql', 'init.sql'),
         test: path.join(ROOT, 'sql', 'test.sql'),
     },
+    urls: {
+        gramodesky: path.join(ROOT, 'urls', 'gramodesky.txt'),
+        muziker: path.join(ROOT, 'urls', 'muziker.txt'),
+        favorites: path.join(ROOT, 'urls', 'favorites.txt'),
+    },
 };

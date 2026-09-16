@@ -3,6 +3,7 @@ CREATE TABLE records (
     store TEXT NOT NULL,
     product_id TEXT NOT NULL,
     ean TEXT,
+    discogs_id TEXT, 
     artist TEXT NOT NULL,
     album TEXT NOT NULL,
     labels TEXT,

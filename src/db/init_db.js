@@ -1,14 +1,7 @@
-import fs from 'node:fs';
-import { PATHS } from '../../config/paths.js';
-import { openDatabase } from './connection.js';
+import { readFile } from '../scripts/utils.js';
 
-const sql = fs.readFileSync(PATHS.sql.init, 'utf8');
-
-const db = openDatabase();
-
-try {
+export function createDB(db) {
+    const sql = readFile('sql', 'init');
     db.exec(sql);
     console.log('Database was created successfully');
-} finally {
-    db.close();
 }

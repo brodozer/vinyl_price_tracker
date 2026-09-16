@@ -15,7 +15,10 @@ export async function parseGramodeskyFavoritesPage(page) {
                 return status.site === statusSite.toLowerCase();
             });
 
-            const price = wishListItem.querySelectorAll('.wishlist-col-price p')[1].textContent.replace(/\s*Kč\s*$/, '');
+            const price = wishListItem
+                .querySelectorAll('.wishlist-col-price p')[1]
+                .textContent.replace(/&nbsp;|nbsp;|\s/g, '')
+                .replace(/Kč$/, '');
             //console.log('item ', wishListItem);
 
             const productId = wishListItem.querySelector('a').getAttribute('href').split('=')[1];

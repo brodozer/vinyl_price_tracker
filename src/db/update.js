@@ -52,13 +52,22 @@ export function updateRecordsInDB(db, records) {
                 .get(record.store, record.productId);
 
             if (!currentRecord) {
-                throw new Error(`Record not found: ${record.store} / ${record.productId}`);
+                //throw new Error(`Record not found: ${record.store} / ${record.productId}`);
+                results.push({
+                    productId: record.productId,
+                    updateStatus: 'not_found',
+                    store: record.store,
+                });
+
+                continue;
             }
 
             const priceChanged = currentRecord.price !== record.price;
             const stockChanged = currentRecord.stock !== record.stock;
 
             const updateStatus = getUpdateStatus(priceChanged, stockChanged);
+
+            //console.log(record.store, record.productId, record.price);
 
             if (priceChanged || stockChanged) {
                 db.prepare(
@@ -94,11 +103,3 @@ export function updateRecordsInDB(db, records) {
         return results;
     })();
 }
-
-// example what I need to get to update the record price
-// {
-//     store: 'muziker',
-//     productId: '338494',
-//     price: 549,
-//     stock: 'in_stock' 0 or 1
-// }

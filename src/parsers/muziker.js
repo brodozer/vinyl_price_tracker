@@ -21,6 +21,7 @@ export async function scrapeMuziker(url) {
     return {
         productId: $('meta[property="lb:id"]').attr('content'),
         ean: null,
+        discogsId: null,
         artist,
         album: albumParts.join(' - '),
         labels:

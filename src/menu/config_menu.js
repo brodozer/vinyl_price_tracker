@@ -30,7 +30,7 @@ export default {
             type: 'select',
             name: 'fileName',
             message: 'Select file',
-            choices: ['gramodesky.txt', 'muziker.txt'],
+            choices: ['gramodesky', 'muziker'],
         },
     ],
 
@@ -71,6 +71,10 @@ export default {
                         value: 'SQL',
                     },
                     {
+                        name: '6. Create new DB',
+                        value: 'DB',
+                    },
+                    {
                         name: 'Back to menu',
                         value: 'back',
                     },
@@ -109,7 +113,7 @@ export default {
             {
                 type: 'input',
                 name: 'file',
-                message: 'Type the file name',
+                message: 'Type the file name...',
             },
         ],
     },

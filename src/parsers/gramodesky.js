@@ -121,6 +121,7 @@ export async function scrapeGramodesky(url) {
                     album: details.Titul,
                     labels: details.Vydavatelství || null,
                     ean: details.EAN || null,
+                    discogsId: details['Discogs ID'] || null,
                     releaseDate: releaseDate || null,
                     price: getPrice(productId),
                     currency: 'CZK',

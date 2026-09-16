@@ -1,6 +1,6 @@
 import inquirer from 'inquirer';
 
-import { readFile } from '../scripts/read_file.js';
+import { getUrlsFromFile } from '../scripts/utils.js';
 import { addRecords } from '../scripts/add_records.js';
 
 import menu, { ACTIONS } from './config_menu.js';
@@ -58,7 +58,7 @@ async function addRecordsMenu() {
 
     if (source === 'Import File') {
         const { fileName } = await inquirer.prompt(menu.addFile);
-        urls = await readFile('urls', fileName);
+        urls = getUrlsFromFile('urls', fileName);
         console.log('urls ', urls);
     }
 
