@@ -1,36 +1,12 @@
-import { scrapeGramodesky } from './gramodesky.js';
-import { scrapeMuziker } from './muziker.js';
+import { getGramodeskyRecords } from './gramodesky.js';
+import { getMuzikerRecords } from './muziker.js';
 
-const stores = {
-    'gramodesky.cz': { name: 'Gramodesky', scraper: scrapeGramodesky },
-    'muziker.cz': { name: 'Muziker', scraper: scrapeMuziker },
-};
+export async function getRecords(store, urls = []) {
+    switch (store) {
+        case 'Muziker':
+            return getMuzikerRecords(urls);
 
-async function parseRecord(url) {
-    const parsedUrl = new URL(url);
-    const hostname = parsedUrl.hostname.toLowerCase();
-    const store = stores[hostname.replace(/^www\./, '')];
-    // parsedUrl.search = '';
-    // const cleanURL = parsedUrl.toString();
-
-    if (!store) {
-        throw new Error(`The store ${hostname} doesn't have a parser`);
+        case 'Gramodesky':
+            return getGramodeskyRecords();
     }
-
-    return {
-        ...(await store.scraper(url)),
-        store: store.name,
-    };
-}
-
-export async function getRecords(urls) {
-    if (!urls || urls.length === 0) {
-        throw new Error("urls doesn't contains links");
-    }
-    const records = [];
-    for (let url of urls) {
-        const record = await parseRecord(url);
-        records.push(record);
-    }
-    return records;
 }

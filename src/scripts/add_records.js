@@ -20,11 +20,11 @@ function notifications(newRecords) {
 }
 
 // check catch the errors from getRecords()
-export async function addRecords(urls) {
+export async function addRecords(store, urls) {
     const db = openDatabase();
 
     try {
-        const records = await getRecords(urls);
+        const records = await getRecords(store, urls);
 
         console.log('records ', records);
 

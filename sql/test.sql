@@ -17,20 +17,18 @@ SELECT artist, album, price, currency, release_date FROM records;
 -- SET url = 'https://www.gramodesky.cz/album/motley-crue-dr-feelgood-1989-7656' 
 -- WHERE id = 14;
 
--- UPDATE records 
--- SET price = 350, stock = 'out_of_stock'
--- WHERE id = 28;
+UPDATE records 
+SET price = 700, stock = 'out_of_stock'
+WHERE id = 75;
 
--- UPDATE records
--- SET price = 500
--- WHERE id = 14;
+UPDATE records
+SET price = 900
+WHERE id = 73;
 
--- UPDATE records
--- SET stock = 'in_stock'
--- WHERE id = 27;
+UPDATE records
+SET stock = 'out_of_stock'
+WHERE id = 74;
 
-ALTER TABLE records
-ADD COLUMN discogs_id TEXT;
 
 
 

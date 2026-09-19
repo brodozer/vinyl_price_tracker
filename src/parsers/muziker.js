@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-export async function scrapeMuziker(url) {
+async function scrapeMuzikerPage(url) {
     const response = await axios.get(url);
     const $ = cheerio.load(response.data);
 
@@ -34,7 +34,18 @@ export async function scrapeMuziker(url) {
         price: Number($('[data-original-price-value]').attr('data-original-price-value')),
         currency: 'CZK',
         stock: $('.stock-status-detail.stock-status-green').length > 0 ? 'in_stock' : 'out_of_stock',
+        store: 'Muziker',
     };
+}
+
+export async function getMuzikerRecords(urls) {
+    const records = [];
+
+    for (const url of urls) {
+        records.push(await scrapeMuzikerPage(url));
+    }
+
+    return records;
 }
 
 // stock:

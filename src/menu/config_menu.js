@@ -8,6 +8,15 @@ export default {
         },
     ],
 
+    store: [
+        {
+            type: 'select',
+            name: 'store',
+            message: 'Select store',
+            choices: ['Gramodesky', 'Muziker'],
+        },
+    ],
+
     add: [
         {
             type: 'select',
@@ -30,7 +39,7 @@ export default {
             type: 'select',
             name: 'fileName',
             message: 'Select file',
-            choices: ['gramodesky', 'muziker'],
+            choices: ['muziker'],
         },
     ],
 

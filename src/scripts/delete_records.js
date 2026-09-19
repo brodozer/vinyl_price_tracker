@@ -13,6 +13,7 @@ export async function deleteRecords(recordIds) {
                 console.log(error.message);
             }
         }
+        console.log('delete completed');
     } finally {
         db.close();
     }

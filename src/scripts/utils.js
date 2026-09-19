@@ -15,3 +15,15 @@ export function getUrlsFromFile(folder, file) {
         .filter(Boolean);
     return urls;
 }
+
+export async function checkChrome(url) {
+    try {
+        const response = await fetch(`${url}/json/version`);
+
+        if (!response.ok) {
+            throw new Error(`Chrome DevTools returned ${response.status}`);
+        }
+    } catch {
+        throw new Error('Chrome is not running or remote debugging is not available on port 9222');
+    }
+}

@@ -46,23 +46,28 @@ export async function showMenu() {
 }
 
 async function addRecordsMenu() {
+    const { store } = await inquirer.prompt(menu.store);
+
+    if (store === 'Gramodesky') {
+        await addRecords(store);
+        return;
+    }
+
     const { source } = await inquirer.prompt(menu.add);
 
     let urls = [];
 
     if (source === 'URL') {
         const { url } = await inquirer.prompt(menu.addUrls);
-
         urls = [url];
     }
 
     if (source === 'Import File') {
         const { fileName } = await inquirer.prompt(menu.addFile);
         urls = getUrlsFromFile('urls', fileName);
-        console.log('urls ', urls);
     }
 
-    await addRecords(urls);
+    await addRecords(store, urls);
 }
 
 async function updateRecordsMenu() {
@@ -72,6 +77,7 @@ async function updateRecordsMenu() {
         await updateRecords(store);
     } catch (error) {
         console.log(error.message);
+        // exit from menu
     }
 }
 

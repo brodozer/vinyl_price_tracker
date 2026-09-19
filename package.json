@@ -24,6 +24,6 @@
         "dotenv": "^17.4.2",
         "fast-xml-parser": "^5.10.1",
         "inquirer": "^14.0.2",
-        "puppeteer": "^25.5.0"
+        "puppeteer": "^25.11.0"
     }
 }
